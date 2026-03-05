@@ -1,27 +1,26 @@
 import discord
+from discord.ext import commands
 
-from bot_mantik import emoji_olusturucu, gen_pass
-# İstekler değişkeni botun yetkilerini saklar
 intents = discord.Intents.default()
-# Mesaj okuma yetkisini etkinleştirme
 intents.message_content = True
-# Bir bot oluşturma ve yetkileri aktarma
-client = discord.Client(intents=intents)
-@client.event
-async def on_ready():
-    print(f'{client.user} olarak giris yapildi')
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content.startswith('$emoji'):
-        await message.channel.send(emoji_olusturucu())
-    elif message.content.startswith('$sifre'):
-        await message.channel.send("\U0001f642")
-    else:
-        await message.channel.send("Sifreniz: " + gen_pass(8))
-client.run("MTQ3NDExMTg3MjI5MzY2NjkxOQ.GwbyIl.ufEktCt4atUXIuy48vGzHe3Hj4gQy4J9juM3_Y")
 
-ayarlar = {
-    "on_taki": ">", #ön takı, prefix (maybe it won't work if we call it different here)
-    "TOKEN": "MTQ3NDExMTg3MjI5MzY2NjkxOQ.GwbyIl.ufEktCt4atUXIuy48vGzHe3Hj4gQy4J9juM3_Y"
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'{bot.user} olarak giriş yaptık')
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Merhaba! Ben {bot.user}, bir Discord sohbet botuyum!')
+
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
+
+@bot.command()
+async def add(ctx, left: int, right: int):
+    """Adds two numbers together."""
+    await ctx.send(left + right)
+
+bot.run("MTQ3NDExMTg3MjI5MzY2NjkxOQ.GwbyIl.ufEktCt4atUXIuy48vGzHe3Hj4gQy4J9juM3_Y")

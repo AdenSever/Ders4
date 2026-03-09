@@ -1,5 +1,9 @@
+import random
 import discord
 from discord.ext import commands
+import os
+import requests
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -23,4 +27,50 @@ async def add(ctx, left: int, right: int):
     """Adds two numbers together."""
     await ctx.send(left + right)
 
-bot.run("ADENIN_TOKENI")
+@bot.command()
+async def mem(ctx):
+    with open('images/mem5.png', 'rb') as f:
+        # Dönüştürülen Discord kütüphane dosyasını bu değişkende saklayalım!
+        picture = discord.File(f)
+   # Daha sonra bu dosyayı bir parametre olarak gönderebiliriz!
+    await ctx.send(file=picture)
+
+
+print(os.listdir('images'))
+
+img_name = random.choice(os.listdir('images'))
+
+@bot.command()
+async def pic(ctx):
+    with open(f'images/{img_name}', 'rb') as f:
+        picture = discord.File(f)
+    await ctx.send(file=picture)
+
+def get_dog_image_url():    
+    url = 'https://random.dog/woof.json'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+
+@bot.command('dog')
+async def dog(ctx):
+    '''dog komutunu çağırdığımızda, program kopek_resmi_urlsi_al fonksiyonunu çağırır.'''
+    image_url = get_dog_image_url()
+    await ctx.send(image_url)
+
+
+def get_fox_image_url():    
+    url = 'https://randomfox.ca/floof/'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+
+@bot.command('fox')
+async def fox(ctx):
+    '''fox komutunu çağırdığımızda, program tilki_resmi_urlsi_al fonksiyonunu çağırır.'''
+    image_url = get_fox_image_url()
+    await ctx.send(image_url)
+
+bot.run('ADENIN_TOKENI')
